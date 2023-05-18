@@ -127,7 +127,6 @@ export function login(username?, password?: string, firstLogin = false): Chainab
 
     return cy.session(sessionId, () => {
         cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
-        cy.wait(5000);
         cy.get("h1", { timeout: 120 * SEC }).then(($title) => {
             if ($title.text().toString().trim() !== "Sign in to your account") {
                 return;
@@ -196,7 +195,7 @@ export function selectItemsPerPage(items: number): void {
                 $toggleBtn.eq(0).trigger("click");
                 cy.get(commonView.itemsPerPageMenuOptions);
                 cy.get(`li > button[data-action="per-page-${items}"]`).click({ force: true });
-                cy.wait(2 * SEC);
+                cy.wait(1.5 * SEC);
             }
         });
 }
@@ -615,9 +614,7 @@ export function application_inventory_kebab_menu(menu, tab?): void {
 export function openManageImportsPage(): void {
     // Opens the manage import applications page
     application_inventory_kebab_menu("Manage imports");
-    cy.wait(5 * SEC)
-        .get("h1", { timeout: 5 * SEC })
-        .contains("Application imports");
+    cy.get("h1", { timeout: 10 * SEC }).contains("Application imports");
 }
 
 export function openErrorReport(): void {
@@ -686,7 +683,7 @@ export function deleteAppImportsTableRows(lastPage = false): void {
         openManageImportsPage();
         // Select 100 items per page
         selectItemsPerPage(100);
-        cy.wait(2000);
+        cy.wait(1000);
     }
 
     cy.get(commonView.appTable)
@@ -709,7 +706,7 @@ export function deleteAppImportsTableRows(lastPage = false): void {
                             .click();
                         cy.wait(800);
                         click(commonView.confirmButton);
-                        cy.wait(4000);
+                        cy.wait(2000);
                     });
             }
         });
@@ -979,7 +976,7 @@ export function createMultipleApplications(numberofapplications: number): Array<
         const application = new Assessment(getRandomApplicationData());
         application.create();
         applicationList.push(application);
-        cy.wait(2000);
+        cy.wait(1000);
     }
     return applicationList;
 }
@@ -1056,7 +1053,7 @@ export function deleteAllStakeholders(cancel = false): void {
                                 cy.wait(800);
                             });
                         click(commonView.confirmButton);
-                        cy.wait(4000);
+                        cy.wait(2000);
                     });
             }
         });
