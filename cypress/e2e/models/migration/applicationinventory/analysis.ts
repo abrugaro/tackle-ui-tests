@@ -39,6 +39,7 @@ import {
     doesExistSelector,
     doesExistText,
     inputText,
+    login,
     performRowActionByIcon,
     selectFormItems,
     selectItemsPerPage,
@@ -149,16 +150,25 @@ export class Analysis extends Application {
     }
 
     //Navigate to the Application inventory
-    public static open(): void {
-        selectUserPerspective(migration);
-        clickByText(navMenu, applicationInventory);
-        clickTab(analysis);
-        cy.wait(2 * SEC);
-        selectItemsPerPage(100);
+    public static open(preCheck = false): void {
+        cy.url().then(($url) => {
+            if (preCheck && $url.includes("analysis-tab")) {
+                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
+                clickByText(button, "Select none");
+            }
+
+            if (!preCheck || !$url.includes("analysis-tab")) {
+                selectUserPerspective(migration);
+                clickByText(navMenu, applicationInventory);
+                clickTab(analysis);
+                cy.wait(2 * SEC);
+                selectItemsPerPage(100);
+            }
+        });
     }
 
     create(): void {
-        Analysis.open();
+        Analysis.open(true);
         super.create();
     }
 
@@ -265,7 +275,7 @@ export class Analysis extends Application {
     }
 
     analyze(cancel = false): void {
-        Analysis.open();
+        Analysis.open(true);
         this.selectApplication();
         cy.contains("button", analyzeButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
@@ -365,7 +375,7 @@ export class Analysis extends Application {
     }
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
-        cy.wait(2000);
+        cy.wait(1000);
         performRowActionByIcon(this.name, kebabMenu);
         clickByText(button, manageCredentials);
         if (sourceCred) {
@@ -375,7 +385,7 @@ export class Analysis extends Application {
             selectFormItems(mavenCredential, mavenCred);
         }
         clickByText(button, save);
-        cy.wait(2000);
+        cy.wait(1000);
     }
 
     validateStoryPoints(): void {

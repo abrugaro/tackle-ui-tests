@@ -266,14 +266,14 @@ export class Application {
     }
 
     selectApplication(): void {
-        cy.wait(4000);
+        cy.wait(2000);
         cy.get(tdTag)
             .contains(this.name)
             // .parent(tdTag)
             .closest(trTag)
             .within(() => {
                 click(selectBox);
-                cy.wait(2000);
+                cy.wait(500);
             });
     }
 
