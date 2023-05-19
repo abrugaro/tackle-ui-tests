@@ -130,8 +130,7 @@ export class Stakeholdergroups {
 
     delete(cancel = false): void {
         Stakeholdergroups.openList();
-        selectItemsPerPage(100);
-        cy.wait(2000);
+        cy.wait(1000);
         performRowAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();

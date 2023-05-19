@@ -132,7 +132,6 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
 
         // Verify if the second stakeholder group's name got detached from stakeholder
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)
@@ -174,7 +173,6 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
 
         // Check if the job function got attached to stakeholder
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)
@@ -192,7 +190,6 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
 
         // Verify if the job function's name attached to the stakeholder got updated
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)
@@ -211,7 +208,6 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
 
         // Verify if the job function's name got detached from stakeholder
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)

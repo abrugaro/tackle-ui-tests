@@ -20,7 +20,6 @@ import {
     deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     preservecookies,
     resetURL,
@@ -28,8 +27,10 @@ import {
 } from "../../../../../utils/utils";
 import { Proxy } from "../../../../models/administration/proxy/proxy";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { analysis } from "../../../../types/constants";
+import { analysis, AnalysisStatuses } from "../../../../types/constants";
 import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
+
+const analyses = {};
 
 describe(["@tier1"], "Upload Binary Analysis", () => {
     before("Login", function () {
@@ -60,6 +61,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        Analysis.open(true);
     });
 
     afterEach("Persist session", function () {
@@ -79,115 +81,143 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         writeGpgKey("abcde");
     });
 
-    it("Upload Binary Analysis", function () {
-        const application = new Analysis(
+    it("Create applications and start analyses", function () {
+        const application1 = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
-        application.create();
+        application1.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
-        // No credentials required for uploaded binary.
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.downloadReport("HTML");
-        application.openReport();
-        application.validateStoryPoints();
-    });
+        cy.wait(1000);
+        application1.analyze();
+        analyses["uploadbinary_analysis_on_acmeair"] = application1;
 
-    it("Custom rules with custom targets", function () {
-        // Automated https://issues.redhat.com/browse/TACKLE-561
-        const application = new Analysis(
+        const application2 = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_with_customrule"])
         );
-        application.create();
+        application2.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
-        // No credentials required for uploaded binary.
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.downloadReport("CSV");
-        application.openReport();
-        application.validateStoryPoints();
-    });
+        cy.wait(1000);
+        application2.analyze();
+        analyses["uploadbinary_analysis_with_customrule"] = application2;
 
-    it("DIVA report generation", function () {
-        const application = new Analysis(
+        const application3 = new Analysis(
             getRandomApplicationData("DIVA"),
             getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
         );
-        application.create();
+        application3.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
-        // No credentials required for uploaded binary.
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        application.validateTransactionReport();
-    });
+        cy.wait(1000);
+        application3.analyze();
+        analyses["analysis_for_DIVA-report"] = application3;
 
-    it("Analysis for jee-example-app upload binary ", function () {
-        const application = new Analysis(
+        const application4 = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
                 this.analysisData["analysis_and_incident_validation_jeeExample_app"]
             )
         );
-        application.create();
+        application4.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateIncidents();
-    });
+        cy.wait(1000);
+        application4.analyze();
+        analyses["analysis_and_incident_validation_jeeExample_app"] = application4;
 
-    it("Analysis for camunda-bpm-spring-boot-starter", function () {
-        const application = new Analysis(
+        const application5 = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
         );
-        application.create();
+        application5.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        application.validateIncidents();
-    });
+        cy.wait(1000);
+        application5.analyze();
+        analyses["analysis_and_incident_validation_camunda_app"] = application5;
 
-    it("Analysis for complete-duke app upload binary ", function () {
-        const application = new Analysis(
+        const application6 = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
                 this.analysisData["analysis_and_incident_validation_complete-duke"]
             )
         );
-        application.create();
+        application6.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        application.validateIncidents();
-    });
+        cy.wait(1000);
+        application6.analyze();
+        analyses["analysis_and_incident_validation_complete-duke"] = application6;
 
-    it("Analysis for kafka-clients-sb app ", function () {
-        const application = new Analysis(
+        const application7 = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
         );
-        application.create();
+        application7.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        application.validateIncidents();
+        cy.wait(1000);
+        application7.analyze();
+        analyses["analysis_and_incident_validation_kafka"] = application7;
     });
+
+    it("Upload Binary Analysis", function () {
+        const application = analyses["uploadbinary_analysis_on_acmeair"];
+        verifyAndValidate(application, true, false, true);
+    });
+
+    it("Custom rules with custom targets", function () {
+        // Automated https://issues.redhat.com/browse/TACKLE-561
+        const application = analyses["uploadbinary_analysis_with_customrule"];
+
+        verifyAndValidate(application, true, false, false, true);
+
+        application.downloadReport("CSV");
+    });
+
+    it("DIVA report generation", function () {
+        const application = analyses["analysis_for_DIVA-report"];
+        verifyAndValidate(application, true, false);
+        application.validateTransactionReport();
+    });
+
+    it("Analysis for jee-example-app upload binary ", function () {
+        verifyAndValidate(analyses["analysis_and_incident_validation_jeeExample_app"], false);
+    });
+
+    it("Analysis for camunda-bpm-spring-boot-starter", function () {
+        verifyAndValidate(analyses["analysis_and_incident_validation_camunda_app"]);
+    });
+
+    it("Analysis for complete-duke app upload binary ", function () {
+        verifyAndValidate(analyses["analysis_and_incident_validation_complete-duke"]);
+    });
+
+    it("Analysis for kafka-clients-sb app ", function () {
+        verifyAndValidate(analyses["analysis_and_incident_validation_kafka"]);
+    });
+
+    const verifyAndValidate = (
+        analysis: Analysis,
+        validateStoryPoints = true,
+        validateIncidents = true,
+        downloadHTMLReport = false,
+        downloadCSVReport = false
+    ) => {
+        analysis.verifyAnalysisStatus(AnalysisStatuses.completed);
+
+        if (downloadCSVReport) {
+            analysis.downloadReport("CSV");
+        }
+
+        if (downloadHTMLReport) {
+            analysis.downloadReport("HTML");
+        }
+
+        analysis.openReport();
+
+        if (validateStoryPoints) {
+            analysis.validateStoryPoints();
+        }
+
+        if (validateIncidents) {
+            analysis.validateIncidents();
+        }
+    };
 });
