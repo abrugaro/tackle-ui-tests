@@ -241,7 +241,7 @@ export class Assessment extends Application {
             selectItemsPerPage(100);
             this.selectApplication();
             this.click_assess_button();
-            cy.wait(6000);
+            cy.wait(3000);
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholdergroups) this.selectStakeholdergroups(stakeholdergroups);
             clickByText(button, next);

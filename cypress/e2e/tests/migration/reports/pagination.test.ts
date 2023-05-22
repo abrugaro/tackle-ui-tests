@@ -62,7 +62,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Perform assessment of application
         newApplication.perform_assessment("high", [stakeholdersList[0].name]);
         newApplication.verifyStatus("assessment", "Completed");
-        cy.wait(4000);
+        cy.wait(2000);
         // Perform application review
         newApplication.perform_review("high");
         newApplication.verifyStatus("review", "Completed");
@@ -121,7 +121,6 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
 
         // Select 10 items per page
         selectItemsPerPageAdoptionCandidate(10);
@@ -146,7 +145,6 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
 
         // Select 10 items per page
         selectItemsPerPageAdoptionCandidate(10);
@@ -165,7 +163,6 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
 
         // Exapand identified risks card
         expandArticle("Identified risks");
@@ -203,7 +200,6 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
 
         // Exapand identified risks card
         expandArticle("Identified risks");

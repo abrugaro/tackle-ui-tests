@@ -81,7 +81,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         });
     });
 
-    it("Admin, Rules from public repository", function () {
+    it("Admin, Crete and start analyses", function () {
         analysisWithPublicRules = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -92,12 +92,9 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
             this.customRules.rules_from_bookServerApp
         ) as RulesRepositoryFields;
         analysisWithPublicRules.target = [];
-
         analysisWithPublicRules.create();
-        analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
-    });
+        analysisWithPublicRules.analyze();
 
-    it("Admin, Rules from private repository with credentials", function () {
         analysisWithPrivateRules = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -110,12 +107,9 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         };
         analysisWithPrivateRules.customRuleRepository = repositoryData as RulesRepositoryFields;
         analysisWithPrivateRules.target = [];
-
         analysisWithPrivateRules.create();
-        analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
-    });
+        analysisWithPrivateRules.analyze();
 
-    it("Admin, Rules from private repository without credentials", function () {
         analysisWithPrivateRulesNoCred = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -126,9 +120,20 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
             this.customRules.rules_from_tackle_testApp
         ) as RulesRepositoryFields;
         analysisWithPrivateRulesNoCred.target = [];
-
         analysisWithPrivateRulesNoCred.create();
-        analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
+        analysisWithPrivateRulesNoCred.analyze();
+    });
+
+    it("Admin, Rules from public repository", function () {
+        analysisWithPublicRules.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
+    it("Admin, Rules from private repository with credentials", function () {
+        analysisWithPrivateRules.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
+    it("Admin, Rules from private repository without credentials", function () {
+        analysisWithPrivateRulesNoCred.verifyAnalysisStatus(AnalysisStatuses.failed);
         logout();
     });
 
@@ -173,6 +178,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     const analyzeAndVerify = (analysis: Analysis, expectedStatus: AnalysisStatuses) => {
         analysis.analyze();
+        cy.wait(3000); // Required because the same application is being re-analyzed multiple times
         analysis.verifyAnalysisStatus(expectedStatus);
     };
 });
