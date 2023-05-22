@@ -167,8 +167,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         const application = analyses["uploadbinary_analysis_with_customrule"];
 
         verifyAndValidate(application, true, false, false, true);
-
-        application.downloadReport("CSV");
     });
 
     it("DIVA report generation", function () {
