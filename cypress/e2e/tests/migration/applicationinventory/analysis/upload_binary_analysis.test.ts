@@ -71,7 +71,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        cy.wait("@getApplication");
+        cy.wait(3 * SEC);
         application.verifyEffort(
             this.analysisData["uploadbinary_analysis_with_customrule"]["effort"]
         );
@@ -104,7 +104,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        cy.wait("@getApplication");
+        cy.wait(3 * SEC);
         application.verifyEffort(
             this.analysisData["analysis_and_incident_validation_jeeExample_app"]["effort"]
         );
@@ -121,7 +121,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        cy.wait("@getApplication");
+        cy.wait(3 * SEC);
         application.verifyEffort(
             this.analysisData["analysis_and_incident_validation_camunda_app"]["effort"]
         );
@@ -138,7 +138,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        cy.wait("@getApplication");
+        cy.wait(3 * SEC);
         application.verifyEffort(
             this.analysisData["analysis_and_incident_validation_kafka-app"]["effort"]
         );
