@@ -55,7 +55,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
 
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        cy.wait("@getApplication");
+        cy.wait(3 * SEC);
         application.verifyEffort(this.analysisData["uploadbinary_analysis_on_acmeair"]["effort"]);
     });
 
