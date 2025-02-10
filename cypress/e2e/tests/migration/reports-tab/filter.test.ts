@@ -32,7 +32,7 @@ import { AssessmentQuestionnaire } from "../../../models/administration/assessme
 import { Application } from "../../../models/migration/applicationinventory/application";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Reports } from "../../../models/migration/reports-tab/reports-tab";
-import { cloudNative, legacyPathfinder } from "../../../types/constants";
+import { cloudNative, legacyPathfinder, SEC } from "../../../types/constants";
 import {
     identifiedRisksFilterValidations,
     landscapeFilterDropdown,
@@ -49,6 +49,7 @@ describe(["@tier3"], "Reports Tab filter validations", function () {
         deleteApplicationTableRows();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import("questionnaire_import/cloud-native.yaml");
+        cy.wait(3 * SEC);
         AssessmentQuestionnaire.enable(cloudNative);
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
