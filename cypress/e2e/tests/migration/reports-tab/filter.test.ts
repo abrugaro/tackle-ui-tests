@@ -49,10 +49,9 @@ describe(["@tier3"], "Reports Tab filter validations", function () {
         deleteApplicationTableRows();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import("questionnaire_import/cloud-native.yaml");
-        cy.wait(3 * SEC);
         AssessmentQuestionnaire.enable(cloudNative);
         AssessmentQuestionnaire.enable(legacyPathfinder);
-
+        cy.wait(3 * SEC);
         stakeholder = createMultipleStakeholders(1)[0];
         applications = createMultipleApplications(2);
         applications[0].perform_assessment("high", [stakeholder]);
