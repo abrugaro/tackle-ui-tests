@@ -110,6 +110,18 @@ export class MigrationWave {
         project: string,
         issueType: string
     ): void {
+        cy.intercept({
+            method: "GET",
+            url: "/hub/trackers/*/projects*",
+            times: 1,
+        }).as("getProjects");
+
+        cy.intercept({
+            method: "GET",
+            url: "/hub/trackers/*/projects/*/issuetypes*",
+            times: 1,
+        }).as("getIssueTypes");
+
         MigrationWave.open();
         this.expandActionsMenu();
         cy.contains(exportToIssueManagerAction).click();
@@ -119,6 +131,7 @@ export class MigrationWave {
         cy.get(MigrationWaveView.instanceSelectToggle).click();
         cy.contains(button, instance).click();
 
+        cy.wait("@getProjects");
         cy.get(MigrationWaveView.projectSelectToggle).click({ timeout: 20 * SEC });
         cy.contains(button, project).should(($btn) => {
             expect(
@@ -128,6 +141,7 @@ export class MigrationWave {
             $btn.trigger("click");
         });
 
+        cy.wait("@getIssueTypes");
         cy.get(MigrationWaveView.issueTypeSelectToggle).click({ timeout: 20 * SEC });
         cy.contains(button, issueType).click({ timeout: 20 * SEC, force: true });
 
