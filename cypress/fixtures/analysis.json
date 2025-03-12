@@ -12,6 +12,7 @@
         "issues": [
             {
                 "name": "Add Maven profile to run the Quarkus native build",
+                "description": "Leverage a Maven profile to run the Quarkus native build adding the following section",
                 "category": "mandatory",
                 "sources": ["java-ee"],
                 "targets": ["quarkus"],
@@ -25,6 +26,7 @@
             },
             {
                 "name": "Adopt Maven Compiler plugin",
+                "description": "Use the Maven Compiler plugin adding the following sections to the pom.xml file",
                 "category": "mandatory",
                 "sources": ["java-ee"],
                 "targets": ["quarkus"],
@@ -38,6 +40,7 @@
             },
             {
                 "name": "Adopt Maven Failsafe plugin",
+                "description": "Use the Maven Failsafe plugin adding the following sections to the pom.xml file",
                 "category": "mandatory",
                 "sources": ["java-ee"],
                 "targets": ["quarkus"],
@@ -90,6 +93,7 @@
             },
             {
                 "name": "File system - Java IO",
+                "description": "An application running inside a container could lose access to a file in local storage.",
                 "category": "mandatory",
                 "sources": ["None"],
                 "targets": ["cloud-readiness"],
@@ -425,6 +429,7 @@
         "issues": [
             {
                 "name": "@MessageDriven - EJBs are not supported in Quarkus",
+                "description": "Enterprise Java Beans (EJBs) are not supported in Quarkus. CDI must be used.",
                 "category": "mandatory",
                 "sources": ["java-ee"],
                 "targets": ["quarkus"],
@@ -439,6 +444,7 @@
 
             {
                 "name": "@Produces cannot annotate an EntityManager",
+                "description": "In JavaEE/JakartaEE, using `@PersistenceContext` was needed in order to inject a data source.",
                 "category": "potential",
                 "sources": ["jakarta-ee", "java-ee"],
                 "targets": ["quarkus"],
@@ -461,7 +467,7 @@
                 "incidents": 1,
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
-                "rule": "persistence-to-quarkus-00011",
+                "rule": "ee-to-quarkus-00010",
                 "labels": []
             },
 
@@ -475,7 +481,7 @@
                 "incidents": 1,
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
-                "rule": "persistence-to-quarkus-00011",
+                "rule": "ee-to-quarkus-00000",
                 "labels": []
             },
 
@@ -585,6 +591,7 @@
             },
             {
                 "name": "File system - Java IO",
+                "description": "An application running inside a container could lose access to a file in local storage.",
                 "category": "mandatory",
                 "sources": ["None"],
                 "targets": ["cloud-readiness"],
@@ -965,6 +972,7 @@
         "issues": [
             {
                 "name": "File system - Java IO",
+                "description": "An application running inside a container could lose access to a file in local storage.",
                 "category": "mandatory",
                 "sources": ["None"],
                 "targets": ["cloud-readiness"],
@@ -978,6 +986,7 @@
             },
             {
                 "name": "Hardcoded IP Address",
+                "description": "When migrating environments, hard-coded IP addresses may need to be modified or eliminated.",
                 "category": "mandatory",
                 "sources": ["None"],
                 "targets": ["cloud-readiness"],
@@ -1025,6 +1034,7 @@
         "issues": [
             {
                 "name": "File system - Java IO",
+                "description": "An application running inside a container could lose access to a file in local storage.",
                 "category": "mandatory",
                 "source": "None",
                 "targets": ["cloud-readiness"],
@@ -1036,6 +1046,7 @@
             },
             {
                 "name": "Hardcoded IP Address",
+                "description": "When migrating environments, hard-coded IP addresses may need to be modified or eliminated.",
                 "category": "mandatory",
                 "source": "None",
                 "effort": 1,
@@ -1174,6 +1185,7 @@
         "issues": [
             {
                 "name": "Hibernate Search 5 - Changes in indexing numeric and date values",
+                "description": "Numbers and dates are now indexed as numeric fields by default",
                 "category": "optional",
                 "sources": ["eap"],
                 "targets": ["eap"],
@@ -1194,6 +1206,7 @@
         "issues": [
             {
                 "name": "Add Maven profile to run the Quarkus native build",
+                "description": "Leverage a Maven profile to run the Quarkus native build adding the following section to the pom.xml file:",
                 "category": "mandatory",
                 "sources": ["java-ee"],
                 "targets": ["quarkus"],
@@ -1382,6 +1395,7 @@
         "issues": [
             {
                 "name": "Hardcoded IP Address",
+                "description": "When migrating environments, hard-coded IP addresses may need to be modified or eliminated.",
                 "category": "mandatory",
                 "sources": ["None"],
                 "targets": ["cloud-readiness"],

@@ -218,6 +218,10 @@ export class Issues {
         }
         Issues.validateSection(issue.name, sections.rule, div, issue.rule);
         Issues.validateSection(issue.name, sections.labels, div, issue.labels);
+
+        if (issue.description) {
+            validateTextPresence(trTag, issue.description);
+        }
     }
 
     private static validateSection(
