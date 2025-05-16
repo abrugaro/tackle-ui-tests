@@ -1669,12 +1669,7 @@ export function getNamespace(): string {
 }
 
 export function patchTackleCR(option: string, isEnabled = true): void {
-    let value: string;
-    if (isEnabled) {
-        value = "true";
-    } else {
-        value = "false";
-    }
+    const value = isEnabled ? "true" : "false";
     let command = "";
     let namespace = getNamespace();
     let tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
@@ -1691,8 +1686,10 @@ export function patchTackleCR(option: string, isEnabled = true): void {
         command += `--patch '{"spec":{"hub_metrics_enabled": ${value}}}'`;
     }
     cy.log(command);
+    console.log(command);
     cy.exec(command).then((result) => {
         cy.log(result.stderr);
+        console.log(result.stderr);
     });
 
     // Timeout as it takes time until pods are starting to reboot
