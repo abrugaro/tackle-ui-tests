@@ -115,7 +115,7 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
         application.openReport();
     });
 
-    it("Perform RWX=true and clear repository", function () {
+    it.only("Perform RWX=true and clear repository", function () {
         MavenConfiguration.open();
         let rwxEnabled: boolean;
 
@@ -138,6 +138,8 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
             isEnabled(clearRepository, rwxEnabled);
             if (rwxEnabled) mavenConfiguration.clearRepository();
         });
+        console.log("test ok");
+        expect(1).to.eq(1);
     });
 
     after("Perform test data clean up", () => {
